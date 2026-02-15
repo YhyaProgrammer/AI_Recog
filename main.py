@@ -21,18 +21,14 @@ import warnings
 
 warnings.filterwarnings("ignore")
 
-# -----------------------------
-# CONFIG
-# -----------------------------
+
 DB_PATH = "face_database"
 EMBEDDINGS_FILE = "embeddings.npy"
 SIMILARITY_THRESHOLD = 0.65
 
 os.makedirs(DB_PATH, exist_ok=True)
 
-# -----------------------------
-# Model Setup
-# -----------------------------
+
 device = "cuda" if torch.cuda.is_available() else "cpu"
 
 try:
@@ -48,18 +44,12 @@ transform = transforms.Compose([
     transforms.ToTensor()
 ])
 
-# -----------------------------
-# Database (Persistent)
-# -----------------------------
 if os.path.exists(EMBEDDINGS_FILE):
     db_embeddings = np.load(EMBEDDINGS_FILE, allow_pickle=True).item()
 else:
     db_embeddings = {}
 
 
-# -----------------------------
-# Embedding Function
-# -----------------------------
 def extract_embedding(frame_or_path):
     """Extract embedding from a frame or image path"""
     try:
@@ -81,9 +71,6 @@ def extract_embedding(frame_or_path):
         return None
 
 
-# -----------------------------
-# Recognition Logic
-# -----------------------------
 def recognize_face(embedding):
     if not db_embeddings:
         return "Unknown", 0.0
@@ -109,9 +96,7 @@ def recognize_face(embedding):
         return "Unknown", best_score
 
 
-# -----------------------------
-# Modern Tkinter App
-# -----------------------------
+
 class ModernButton(tk.Canvas):
     """Custom modern button widget"""
 
@@ -582,10 +567,6 @@ class RecognitionApp:
         cv2.destroyAllWindows()
         self.root.destroy()
 
-
-# -----------------------------
-# Run App
-# -----------------------------
 if __name__ == "__main__":
     root = tk.Tk()
     app = RecognitionApp(root)
